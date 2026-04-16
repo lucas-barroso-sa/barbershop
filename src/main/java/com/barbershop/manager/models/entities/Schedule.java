@@ -1,6 +1,5 @@
 package com.barbershop.manager.models.entities;
 
-import com.barbershop.manager.models.entities.user.Barber;
 import com.barbershop.manager.models.enums.ScheduleStatus;
 import jakarta.persistence.*;
 
@@ -15,11 +14,16 @@ public class Schedule {
     private LocalDateTime date;
     private ScheduleStatus scheduleStatus;
 
-    private Barber barber;
 
+
+    @OneToMany(fetch = FetchType.LAZY)
     private Servicing servicing;
 
+    @OneToMany(fetch = FetchType.LAZY)
     private Client client;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
 
     public Schedule() {
