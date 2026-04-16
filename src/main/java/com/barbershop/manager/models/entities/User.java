@@ -3,6 +3,9 @@ package com.barbershop.manager.models.entities;
 import com.barbershop.manager.models.enums.UserRole;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "User")
 public class User {
@@ -25,5 +28,10 @@ public class User {
         this.password = password;
         this.role = role;
     }
+    @OneToMany
+    private List<Schedule> schedules = new ArrayList<>();
+
+
+
 
 }

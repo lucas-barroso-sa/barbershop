@@ -21,6 +21,4 @@ public class Servicing {
         this.name = name;
         this.price = price;
     }
-
-
 }

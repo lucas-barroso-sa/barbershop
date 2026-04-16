@@ -16,7 +16,7 @@ public class Client {
     private String telephone;
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Sale> sales = new ArrayList<>();
 
 

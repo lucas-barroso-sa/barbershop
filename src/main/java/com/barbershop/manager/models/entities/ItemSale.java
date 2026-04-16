@@ -15,16 +15,17 @@ public class ItemSale {
     private double unitPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Sale sales;
+    private Sale sale;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    public ItemSale(Long id, int quantity, double unitPrice, Sale sales, Product product) {
+    public ItemSale(Long id, int quantity, double unitPrice, Sale sale, Product product) {
         this.id = id;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
-        this.sales = sales;
+        this.sale = sale;
         this.product = product;
     }
 
@@ -53,11 +54,11 @@ public class ItemSale {
     }
 
     public Sale getSales() {
-        return sales;
+        return sale;
     }
 
     public void setSales(Sale sales) {
-        this.sales = sales;
+        this.sale = sales;
     }
 
     public Product getProduct() {

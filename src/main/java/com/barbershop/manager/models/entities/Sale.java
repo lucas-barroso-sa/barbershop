@@ -22,6 +22,7 @@ public class Sale {
     private List<ItemSale> itens = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     public Sale() {

@@ -20,9 +20,11 @@ public class Schedule {
     private Servicing servicing;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
 
