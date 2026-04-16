@@ -2,6 +2,9 @@ package com.barbershop.manager.models.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "Servicing")
 public class Servicing {
@@ -11,6 +14,9 @@ public class Servicing {
     private String name;
     private double price;
     private int duration;
+
+    @OneToMany
+    private List<Schedule> schedules = new ArrayList<>();
 
     public Servicing() {
 

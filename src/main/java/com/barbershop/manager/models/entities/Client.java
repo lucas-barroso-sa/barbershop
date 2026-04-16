@@ -19,6 +19,9 @@ public class Client {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Sale> sales = new ArrayList<>();
 
+    @OneToMany
+    private List<Schedule> schedules = new ArrayList<>();
+
 
     public Client() {
 
