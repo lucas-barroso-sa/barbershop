@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    container_name: barber-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: lucas_barroso
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: barbershop_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: barber-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: lucas@unifor.br
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
