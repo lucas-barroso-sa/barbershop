@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,20 +19,17 @@ public class ClientService {
    @Autowired
     private ClientRepository clientRepository;
 
+
+
    @Transactional
-    public ClientMinDTO findClientByID(Long id){
-        Optional<Client> optionalClient = clientRepository.findById(id);
-        if(optionalClient.isPresent()){
-            Client client = optionalClient.get();
-            return new ClientMinDTO(client);
-        }else {
-            throw new ResourceNotFoundException("Client not found");
-        }
+   public List<ClientMinDTO> findAll(){
+       return clientRepository.findAll().stream().map(obj -> new ClientMinDTO(obj)).toList();
+   }
 
-
+   @Transactional
+    public ClientMinDTO findByID(Long id){
+        return clientRepository.findById(id)
+                .map(obj -> new ClientMinDTO(obj))
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
     }
-
-
-
-
 }
