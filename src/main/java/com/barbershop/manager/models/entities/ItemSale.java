@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "ItemSale")
+@Table(name = "tb_itemSale")
 public class ItemSale {
 
     @Id
@@ -27,6 +27,10 @@ public class ItemSale {
         this.unitPrice = unitPrice;
         this.sale = sale;
         this.product = product;
+    }
+
+    public ItemSale() {
+
     }
 
     public Long getId() {

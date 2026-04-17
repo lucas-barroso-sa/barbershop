@@ -3,7 +3,7 @@ package com.barbershop.manager.models.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "product")
+@Table(name = "tb_product")
 public class Product {
 
     @Id
@@ -18,5 +18,9 @@ public class Product {
         this.name = name;
         this.stock = stock;
         this.defaultPrice = defaultPrice;
+    }
+
+    public Product() {
+
     }
 }
