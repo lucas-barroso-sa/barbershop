@@ -2,6 +2,7 @@ package com.barbershop.manager.services;
 
 import com.barbershop.manager.models.DTOs.ClientMinDTO;
 import com.barbershop.manager.models.entities.Client;
+import com.barbershop.manager.models.exceptions.CpfNullException;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
@@ -32,4 +33,25 @@ public class ClientService {
                 .map(obj -> new ClientMinDTO(obj))
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
     }
+    public ClientMinDTO insert(ClientMinDTO dto){
+        Client client = convertDTOtoEntity(dto);
+        clientRepository.save(client);
+        return new ClientMinDTO(client);
+    }
+
+    public Client convertDTOtoEntity(ClientMinDTO dto){
+       if(dto != null && dto.getCpf() != null){
+           Client client = new Client();
+           client.setName(dto.getName());
+           client.setCpf(dto.getCpf());
+           client.setphone(dto.getPhone());
+           client.setEmail(dto.getEmail());
+           return client;
+       }else {
+           throw new CpfNullException("CPF must not be null");
+       }
+    }
+
+
+
 }

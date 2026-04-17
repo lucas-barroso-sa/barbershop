@@ -3,9 +3,8 @@ package com.barbershop.manager.controllers;
 import com.barbershop.manager.models.DTOs.ClientMinDTO;
 import com.barbershop.manager.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,8 +21,17 @@ public class ClientController {
         return this.clientService.findAll();
     }
 
+
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientMinDTO insert(@RequestBody ClientMinDTO clientMinDTO) {
+        return this.clientService.insert(clientMinDTO);
+    }
+
+
     @GetMapping(value = "/{id}")
-    public ClientMinDTO findById(Long id){
+    public ClientMinDTO findById(@PathVariable Long id){
         return clientService.findByID(id);
     }
 
