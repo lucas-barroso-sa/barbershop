@@ -13,7 +13,7 @@ public class Client {
     private Long id;
     private String name;
     private String cpf;
-    private String telephone;
+    private String phone;
     private String email;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -31,7 +31,7 @@ public class Client {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
-        this.telephone = telephone;
+        this.phone = telephone;
         this.email = email;
         this.sales = sales;
         this.schedules = schedules;
@@ -69,12 +69,12 @@ public class Client {
         this.cpf = cpf;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getphone() {
+        return phone;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setphone(String telephone) {
+        this.phone = telephone;
     }
 
     public String getEmail() {
