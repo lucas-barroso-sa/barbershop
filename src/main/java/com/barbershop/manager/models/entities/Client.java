@@ -27,10 +27,22 @@ public class Client {
 
     }
 
-    public Client(Long id, String name, String cpf) {
+    public Client(Long id, String name, String cpf, String telephone, String email, List<Sale> sales, List<Schedule> schedules) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
+        this.telephone = telephone;
+        this.email = email;
+        this.sales = sales;
+        this.schedules = schedules;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 
     public Long getId() {

@@ -4,6 +4,7 @@ import com.barbershop.manager.models.enums.ScheduleStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Schedule")
@@ -17,7 +18,8 @@ public class Schedule {
 
 
     @OneToMany(fetch = FetchType.LAZY)
-    private Servicing servicing;
+    @JoinColumn(name = "servicings_id")
+    private List<Servicing> servicings;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
@@ -37,5 +39,51 @@ public class Schedule {
         this.scheduleStatus = scheduleStatus;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public ScheduleStatus getScheduleStatus() {
+        return scheduleStatus;
+    }
+
+    public void setScheduleStatus(ScheduleStatus scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
+    }
+
+    public List<Servicing> getServicings() {
+        return servicings;
+    }
+
+    public void setServicings(List<Servicing> servicings) {
+        this.servicings = servicings;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
