@@ -9,6 +9,7 @@ import com.barbershop.manager.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import java.util.ConcurrentModificationException;
@@ -85,6 +86,21 @@ public class ClientService {
            throw new ConcurrentModificationException("Record was updated by another user. Please refresh and try again.");
        }
    }
+    @Transactional
+    public void deleteById(Long id) {
+        if (id == null) {
+            // Lançamos uma exceção clara, convertida pelo Spring para 400 Bad Request
+            throw new IllegalArgumentException("O ID do recurso é obrigatório para a exclusão.");
+        }
+        try {
+            clientRepository.deleteById(id);
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Property not found with ID: " + id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException("Integrity violation: Property ID " + id + " is referenced by other data (e.g., Reservations).");
+        }
+    }
 
 
 }
