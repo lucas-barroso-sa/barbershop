@@ -3,22 +3,26 @@ package com.barbershop.manager.models.DTOs;
 import com.barbershop.manager.models.entities.User;
 import com.barbershop.manager.models.enums.UserRole;
 
-public class UserDTO {
+public class UserInsertDTO {
     private Long id;
     private String name;
     private String email;
+    ;
     private UserRole role;
+    private String password;
 
-
-    public UserDTO() {
+    public UserInsertDTO() {
 
     }
 
-    public UserDTO(User entity) {
+
+
+    public UserInsertDTO(User entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.email = entity.getEmail();
         this.role = entity.getRole();
+        this.password = entity.getPassword();
     }
 
     public Long getId() {
@@ -55,5 +59,11 @@ public class UserDTO {
         this.role = role;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
