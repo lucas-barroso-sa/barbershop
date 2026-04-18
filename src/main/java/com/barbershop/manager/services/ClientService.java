@@ -3,16 +3,16 @@ package com.barbershop.manager.services;
 import com.barbershop.manager.models.DTOs.ClientMinDTO;
 import com.barbershop.manager.models.entities.Client;
 import com.barbershop.manager.models.exceptions.CpfNullException;
+import com.barbershop.manager.models.exceptions.DataBaseException;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
+import java.util.ConcurrentModificationException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -29,9 +29,10 @@ public class ClientService {
 
    @Transactional
     public ClientMinDTO findByID(Long id){
+
         return clientRepository.findById(id)
                 .map(obj -> new ClientMinDTO(obj))
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id));
     }
     public ClientMinDTO insert(ClientMinDTO dto){
         Client client = convertDTOtoEntity(dto);
@@ -52,6 +53,38 @@ public class ClientService {
        }
     }
 
+// TODO(refactor: validation with equals to compare Strings, verifie if CPF exists)
+    public void updateEntityFromDTO(Client entity, ClientMinDTO dto){
+       if(dto.getName() != null && dto.getName() != entity.getName()){
+           entity.setName(dto.getName());
+       }
+       if(dto.getCpf() !=null &&  dto.getCpf() != entity.getCpf()){
+           entity.setCpf(dto.getCpf());
+       }
+       if(dto.getPhone() !=null){
+           entity.setphone(dto.getPhone());
+       }
+       if(dto.getEmail() !=null){
+           entity.setEmail(dto.getEmail());
+       }
+    }
+
+    @Transactional
+    public ClientMinDTO updateById(Long id, ClientMinDTO dto){
+       try{
+           Client client = clientRepository.findById(id)
+                   .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id));
+           updateEntityFromDTO(client, dto);
+           Client entity = clientRepository.save(client);
+           return new ClientMinDTO(entity);
+       }
+       catch (DataIntegrityViolationException e){
+           throw new DataBaseException("Integrity violation during update. Check unique fields or foreign keys.");
+       }
+       catch (ObjectOptimisticLockingFailureException e){
+           throw new ConcurrentModificationException("Record was updated by another user. Please refresh and try again.");
+       }
+   }
 
 
 }

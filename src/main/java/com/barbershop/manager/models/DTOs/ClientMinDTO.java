@@ -1,12 +1,15 @@
 package com.barbershop.manager.models.DTOs;
 
 import com.barbershop.manager.models.entities.Client;
-
+import jakarta.validation.constraints.Pattern;
 public class ClientMinDTO {
 
     private Long  id;
     private String name;
+
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 000.000.000-00")
     private String cpf;
+
     private String phone;
     private String email;
 
@@ -22,6 +25,9 @@ public class ClientMinDTO {
         this.email = entity.getEmail();
 
     }
+
+
+
 
     public Long getId() {
         return id;
