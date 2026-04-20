@@ -17,9 +17,16 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public User findEntityById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("User not found with id " + id));
+    }
+
     @Transactional
     public List<UserDTO> findAll() {
-        return userRepository.findAll().stream().map(obj -> new UserDTO(obj)).toList();
+        return userRepository.findAll()
+                .stream()
+                .map(obj -> new UserDTO(obj)).toList();
 
     }
 
@@ -33,7 +40,7 @@ public class UserService {
     public User convertDTOtoEntity(UserInsertDTO userDTO) {
         if (userDTO != null && userDTO.getRole() != null && userDTO.getEmail() != null) {
             User user = new User();
-            user.setName(user.getName());
+            user.setName(userDTO.getName());
             user.setEmail(userDTO.getEmail());
             user.setId(userDTO.getId());
             user.setRole(userDTO.getRole());

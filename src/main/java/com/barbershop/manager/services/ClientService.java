@@ -28,6 +28,10 @@ public class ClientService {
        return clientRepository.findAll().stream().map(obj -> new ClientMinDTO(obj)).toList();
    }
 
+   public Client findEntityById(Long id){
+       return clientRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Client not found with id "+id));
+   }
+
    @Transactional
     public ClientMinDTO findByID(Long id){
 
