@@ -27,7 +27,6 @@ public class ClientController {
             clientService.deleteById(id);
     }
 
-
     @GetMapping
     public List<ClientMinDTO> findAll() {
         return this.clientService.findAll();
