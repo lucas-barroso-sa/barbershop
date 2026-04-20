@@ -12,7 +12,8 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime date;
+    @Column(name = "appointment_time", nullable = false)
+    private LocalDateTime appointmentTime;
     private ScheduleStatus scheduleStatus;
 
 
@@ -35,7 +36,7 @@ public class Schedule {
 
     public Schedule(Long id, LocalDateTime date, ScheduleStatus scheduleStatus) {
         this.id = id;
-        this.date = date;
+        this.appointmentTime = date;
         this.scheduleStatus = scheduleStatus;
     }
 
@@ -47,12 +48,12 @@ public class Schedule {
         this.id = id;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getAppointmentTime() {
+        return appointmentTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setAppointmentTime(LocalDateTime date) {
+        this.appointmentTime = date;
     }
 
     public ScheduleStatus getScheduleStatus() {
