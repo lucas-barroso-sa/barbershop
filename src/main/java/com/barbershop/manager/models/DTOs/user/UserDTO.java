@@ -1,4 +1,4 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.user;
 
 import com.barbershop.manager.models.entities.User;
 import com.barbershop.manager.models.enums.UserRole;

@@ -1,7 +1,7 @@
 package com.barbershop.manager.services;
 
-import com.barbershop.manager.models.DTOs.UserDTO;
-import com.barbershop.manager.models.DTOs.UserInsertDTO;
+import com.barbershop.manager.models.DTOs.user.UserDTO;
+import com.barbershop.manager.models.DTOs.user.UserInsertDTO;
 import com.barbershop.manager.models.entities.User;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.models.exceptions.RoleNullException;

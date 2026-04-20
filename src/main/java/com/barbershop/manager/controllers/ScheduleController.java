@@ -6,6 +6,7 @@ import com.barbershop.manager.services.ScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class ScheduleController {
         List<ScheduleDTO> list = scheduleService.findByDate(date);
         return ResponseEntity.ok().body(list);
     }
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ScheduleDTO insertSchedule(@RequestBody @Valid ScheduleInsertDTO dto) {
         return scheduleService.insert(dto);
