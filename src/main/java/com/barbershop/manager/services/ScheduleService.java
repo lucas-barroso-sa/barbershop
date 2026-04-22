@@ -1,9 +1,9 @@
 package com.barbershop.manager.services;
 
-import com.barbershop.manager.models.DTOs.ScheduleDTO;
-import com.barbershop.manager.models.DTOs.ScheduleInsertDTO;
+import com.barbershop.manager.models.DTOs.Schedule.ScheduleDTO;
+import com.barbershop.manager.models.DTOs.Schedule.ScheduleInsertDTO;
+import com.barbershop.manager.models.DTOs.Schedule.ScheduleMinDTO;
 import com.barbershop.manager.models.entities.Schedule;
-import com.barbershop.manager.models.entities.Servicing;
 import com.barbershop.manager.models.enums.ScheduleStatus;
 import com.barbershop.manager.repositories.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,13 +35,13 @@ public class ScheduleService {
 
 
     @Transactional(readOnly = true)
-    public List<ScheduleDTO> findByDate(LocalDate date) {
+    public List<ScheduleMinDTO> findByDate(LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
         List<Schedule> schedules = scheduleRepository.findByAppointmentTimeBetweenOrderByAppointmentTimeAsc(
                 startOfDay, endOfDay
         );
-        return schedules.stream().map(obj -> new ScheduleDTO(obj)).toList();
+        return schedules.stream().map(obj -> new ScheduleMinDTO(obj)).toList();
     }
 
     public Schedule convertDTOToEntity(ScheduleInsertDTO dto) {
