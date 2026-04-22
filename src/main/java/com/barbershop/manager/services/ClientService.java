@@ -46,15 +46,14 @@ public class ClientService {
     }
 
     public Client convertDTOtoEntity(ClientMinDTO dto){
-       if(dto != null && dto.getCpf() != null){
+       if(dto != null && dto.getName() != null){
            Client client = new Client();
            client.setName(dto.getName());
-           client.setCpf(dto.getCpf());
            client.setphone(dto.getPhone());
            client.setEmail(dto.getEmail());
            return client;
        }else {
-           throw new CpfNullException("CPF must not be null");
+           throw new CpfNullException("Name must not be null");
        }
     }
 
@@ -62,9 +61,6 @@ public class ClientService {
     public void updateEntityFromDTO(Client entity, ClientMinDTO dto){
        if(dto.getName() != null && dto.getName() != entity.getName()){
            entity.setName(dto.getName());
-       }
-       if(dto.getCpf() !=null &&  dto.getCpf() != entity.getCpf()){
-           entity.setCpf(dto.getCpf());
        }
        if(dto.getPhone() !=null){
            entity.setphone(dto.getPhone());
