@@ -8,6 +8,7 @@ import com.barbershop.manager.models.exceptions.RoleNullException;
 import com.barbershop.manager.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User findEntityById(Long id) {
         return userRepository.findById(id)
@@ -37,13 +41,15 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    public User convertDTOtoEntity(UserInsertDTO userDTO) {
-        if (userDTO != null && userDTO.getRole() != null && userDTO.getEmail() != null) {
+    public User convertDTOtoEntity(UserInsertDTO dto) {
+        if (dto != null && dto.getRole() != null && dto.getEmail() != null) {
             User user = new User();
-            user.setName(userDTO.getName());
-            user.setEmail(userDTO.getEmail());
-            user.setId(userDTO.getId());
-            user.setRole(userDTO.getRole());
+            user.setName(dto.getName());
+            user.setEmail(dto.getEmail());
+            user.setId(dto.getId());
+            user.setRole(dto.getRole());
+            String encryptedPassword = passwordEncoder.encode(dto.getPassword());
+            user.setPassword(encryptedPassword);
             return user;
         } else {
             throw new RoleNullException("Role must not be null");
