@@ -9,6 +9,7 @@ import com.barbershop.manager.services.TokenService;
 import com.barbershop.manager.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     @Autowired
+    @Lazy
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenService tokenService;
@@ -31,12 +33,20 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        try {
+            System.out.println(">>> TENTANDO AUTENTICAR: " + data.login());
 
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+            var token = tokenService.generateToken((User) auth.getPrincipal());
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+
+        } catch (Exception e) {
+            System.out.println(">>> ERRO NO LOGIN: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @PostMapping("/register")
