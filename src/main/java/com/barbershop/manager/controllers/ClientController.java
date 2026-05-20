@@ -42,8 +42,8 @@ public class ClientController {
 
 
     @GetMapping(value = "/{id}")
-    public ClientMinDTO findById(@PathVariable Long id){
-        return clientService.findByID(id);
+    public ClientMinDTO findMinById(@PathVariable Long id){
+        return clientService.findMinByID(id);
     }
 
 }

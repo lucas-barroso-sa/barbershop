@@ -1,7 +1,7 @@
 package com.barbershop.manager.controllers;
 
-import com.barbershop.manager.models.DTOs.UserDTO;
-import com.barbershop.manager.models.DTOs.UserInsertDTO;
+import com.barbershop.manager.models.DTOs.user.UserDTO;
+import com.barbershop.manager.models.DTOs.user.UserInsertDTO;
 import com.barbershop.manager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -12,7 +12,6 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String cpf;
     private String phone;
     private String email;
 
@@ -27,10 +26,9 @@ public class Client {
 
     }
 
-    public Client(Long id, String name, String cpf, String telephone, String email, List<Sale> sales, List<Schedule> schedules) {
+    public Client(Long id, String name, String telephone, String email, List<Sale> sales, List<Schedule> schedules) {
         this.id = id;
         this.name = name;
-        this.cpf = cpf;
         this.phone = telephone;
         this.email = email;
         this.sales = sales;
@@ -59,14 +57,6 @@ public class Client {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getphone() {

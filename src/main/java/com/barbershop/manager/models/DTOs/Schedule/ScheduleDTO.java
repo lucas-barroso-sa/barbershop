@@ -1,11 +1,13 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.Schedule;
 
+import com.barbershop.manager.models.DTOs.ClientMinDTO;
+import com.barbershop.manager.models.DTOs.ServicingDTO;
+import com.barbershop.manager.models.DTOs.user.UserDTO;
 import com.barbershop.manager.models.entities.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleDTO {

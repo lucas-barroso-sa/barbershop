@@ -1,5 +1,6 @@
 package com.barbershop.manager.services;
 
+import com.barbershop.manager.models.DTOs.ClientDTO;
 import com.barbershop.manager.models.DTOs.ClientMinDTO;
 import com.barbershop.manager.models.entities.Client;
 import com.barbershop.manager.models.exceptions.CpfNullException;
@@ -33,12 +34,13 @@ public class ClientService {
    }
 
    @Transactional
-    public ClientMinDTO findByID(Long id){
+    public ClientMinDTO findMinByID(Long id){
 
         return clientRepository.findById(id)
                 .map(obj -> new ClientMinDTO(obj))
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id));
     }
+    @Transactional
     public ClientMinDTO insert(ClientMinDTO dto){
         Client client = convertDTOtoEntity(dto);
         clientRepository.save(client);
@@ -46,25 +48,20 @@ public class ClientService {
     }
 
     public Client convertDTOtoEntity(ClientMinDTO dto){
-       if(dto != null && dto.getCpf() != null){
+       if(dto != null && dto.getName() != null){
            Client client = new Client();
            client.setName(dto.getName());
-           client.setCpf(dto.getCpf());
            client.setphone(dto.getPhone());
            client.setEmail(dto.getEmail());
            return client;
        }else {
-           throw new CpfNullException("CPF must not be null");
+           throw new CpfNullException("Name must not be null");
        }
     }
 
-// TODO(refactor: validation with equals to compare Strings, verifie if CPF exists)
     public void updateEntityFromDTO(Client entity, ClientMinDTO dto){
        if(dto.getName() != null && dto.getName() != entity.getName()){
            entity.setName(dto.getName());
-       }
-       if(dto.getCpf() !=null &&  dto.getCpf() != entity.getCpf()){
-           entity.setCpf(dto.getCpf());
        }
        if(dto.getPhone() !=null){
            entity.setphone(dto.getPhone());

@@ -13,5 +13,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             LocalDateTime start,
             LocalDateTime end
     );
+    List<Schedule>FindAllByClientIdOrderByAppointmentTimeAsc(Long clientId);
 
 }

@@ -1,4 +1,4 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.Schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
