@@ -1,5 +1,6 @@
 package com.barbershop.manager.services;
 
+import com.barbershop.manager.models.DTOs.ClientDTO;
 import com.barbershop.manager.models.DTOs.ClientMinDTO;
 import com.barbershop.manager.models.entities.Client;
 import com.barbershop.manager.models.exceptions.CpfNullException;
@@ -33,12 +34,13 @@ public class ClientService {
    }
 
    @Transactional
-    public ClientMinDTO findByID(Long id){
+    public ClientMinDTO findMinByID(Long id){
 
         return clientRepository.findById(id)
                 .map(obj -> new ClientMinDTO(obj))
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + id));
     }
+    @Transactional
     public ClientMinDTO insert(ClientMinDTO dto){
         Client client = convertDTOtoEntity(dto);
         clientRepository.save(client);
@@ -57,7 +59,6 @@ public class ClientService {
        }
     }
 
-// TODO(refactor: validation with equals to compare Strings, verifie if CPF exists)
     public void updateEntityFromDTO(Client entity, ClientMinDTO dto){
        if(dto.getName() != null && dto.getName() != entity.getName()){
            entity.setName(dto.getName());

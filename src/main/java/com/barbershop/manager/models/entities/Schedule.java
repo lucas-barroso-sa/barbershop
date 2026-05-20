@@ -14,6 +14,8 @@ public class Schedule {
     private Long id;
     @Column(name = "appointment_time", nullable = false)
     private LocalDateTime appointmentTime;
+
+    @Enumerated(EnumType.STRING)
     private ScheduleStatus scheduleStatus;
 
 

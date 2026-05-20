@@ -33,7 +33,6 @@ public class ScheduleService {
                 .map(obj -> new ScheduleDTO(obj)).toList();
     }
 
-
     @Transactional(readOnly = true)
     public List<ScheduleMinDTO> findByDate(LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
@@ -49,7 +48,7 @@ public class ScheduleService {
         if (dto.getAppointmentTime() != null) {
             schedule.setAppointmentTime(dto.getAppointmentTime());
         }else throw  new IllegalArgumentException("Appointment Time must not be null");
-        schedule.setScheduleStatus(ScheduleStatus.pending);
+        schedule.setScheduleStatus(ScheduleStatus.PENDING);
         if (dto.getServicingIds() == null || dto.getServicingIds().isEmpty()) {
             throw new IllegalArgumentException("At least one servicing must be specified");
         }
