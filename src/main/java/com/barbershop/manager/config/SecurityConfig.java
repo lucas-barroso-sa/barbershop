@@ -60,7 +60,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of("http://localhost:3000")); // Origem do Next.js
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
