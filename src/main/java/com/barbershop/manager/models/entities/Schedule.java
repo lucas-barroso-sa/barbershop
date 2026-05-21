@@ -2,7 +2,9 @@ package com.barbershop.manager.models.entities;
 
 import com.barbershop.manager.models.enums.ScheduleStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,9 +16,10 @@ public class Schedule {
     private Long id;
     @Column(name = "appointment_time", nullable = false)
     private LocalDateTime appointmentTime;
-
     @Enumerated(EnumType.STRING)
     private ScheduleStatus scheduleStatus;
+    @NotNull
+    private BigDecimal scheduleValue;
 
 
 
@@ -36,11 +39,21 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(Long id, LocalDateTime date, ScheduleStatus scheduleStatus) {
+    public Schedule(Long id, LocalDateTime date, ScheduleStatus scheduleStatus,BigDecimal scheduleValue) {
         this.id = id;
         this.appointmentTime = date;
         this.scheduleStatus = scheduleStatus;
+        this.scheduleValue = scheduleValue;
     }
+
+    public BigDecimal calculateGrossValue() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (Servicing servicing : servicings) {
+            sum = sum.add(servicing.getPrice());
+        }
+        return sum;
+    }
+
 
     public Long getId() {
         return id;
@@ -88,5 +101,13 @@ public class Schedule {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public BigDecimal getScheduleValue() {
+        return scheduleValue;
+    }
+
+    public void setScheduleValue(BigDecimal paidValue) {
+        this.scheduleValue = paidValue;
     }
 }

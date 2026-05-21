@@ -1,7 +1,9 @@
 package com.barbershop.manager.models.DTOs.Schedule;
 
 import com.barbershop.manager.models.entities.Schedule;
+import com.barbershop.manager.models.enums.ScheduleStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,7 +13,8 @@ public class ScheduleMinDTO {
     private String barberName;
     private List<String> serviceNames;
     private LocalDateTime appointmentTime;
-    private double price;
+    private BigDecimal scheduleValue;
+    private ScheduleStatus scheduleStatus;
 
     public ScheduleMinDTO() {}
 
@@ -24,8 +27,16 @@ public class ScheduleMinDTO {
                 .map(obj -> obj.getName())
                 .toList();
         this.appointmentTime = entity.getAppointmentTime();
-        this.price = entity.getServicings()
-                .stream().mapToDouble(obj -> obj.getPrice()).sum();
+        this.scheduleValue = entity.getScheduleValue();
+        this.scheduleStatus = entity.getScheduleStatus();
+    }
+
+    public ScheduleStatus getScheduleStatus() {
+        return scheduleStatus;
+    }
+
+    public void setScheduleStatus(ScheduleStatus scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
     }
 
     public Long getId() {
@@ -52,12 +63,12 @@ public class ScheduleMinDTO {
         this.serviceNames = serviceNames;
     }
 
-    public double getPrice() {
-        return price;
+    public BigDecimal getScheduleValue() {
+        return scheduleValue;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setScheduleValue(BigDecimal price) {
+        this.scheduleValue = price;
     }
 
     public String getClientName() {

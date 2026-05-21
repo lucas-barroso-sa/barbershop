@@ -7,6 +7,7 @@ import com.barbershop.manager.models.entities.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ScheduleDTO {
     private ClientMinDTO client;
     private List<ServicingDTO> servicings;
     private UserDTO user;
+    private BigDecimal scheduleValue;
 
 
     public ScheduleDTO() {
@@ -31,6 +33,7 @@ public class ScheduleDTO {
                 .stream()
                 .map(obj -> new ServicingDTO(obj)).toList();
         this.user = new UserDTO(entity.getUser());
+        this.scheduleValue = entity.getScheduleValue();
     }
 
     public UserDTO getUser() {
@@ -71,5 +74,13 @@ public class ScheduleDTO {
 
     public void setServicings(List<ServicingDTO> servicings) {
         this.servicings = servicings;
+    }
+
+    public BigDecimal getScheduleValue() {
+        return scheduleValue;
+    }
+
+    public void setScheduleValue(BigDecimal scheduleValue) {
+        this.scheduleValue = scheduleValue;
     }
 }

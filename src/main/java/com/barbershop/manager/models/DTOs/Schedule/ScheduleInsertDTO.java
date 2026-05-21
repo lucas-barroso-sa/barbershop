@@ -1,9 +1,11 @@
 package com.barbershop.manager.models.DTOs.Schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,11 +22,12 @@ public class ScheduleInsertDTO {
 
     @NotEmpty(message = "must have at least one servicing")
     private List<Long> servicingIds;
+    @Min(value = 0)
+    private BigDecimal scheduleValue;
 
     public ScheduleInsertDTO() {
     }
 
-    // Getters e Setters
     public LocalDateTime getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(LocalDateTime appointmentTime) { this.appointmentTime = appointmentTime; }
 
@@ -36,5 +39,8 @@ public class ScheduleInsertDTO {
 
     public List<Long> getServicingIds() { return servicingIds; }
     public void setServicingIds(List<Long> servicingIds) { this.servicingIds = servicingIds; }
+
+    public BigDecimal getScheduleValue() { return scheduleValue; }
+    public void setScheduleValue(BigDecimal scheduleValue) { this.scheduleValue = scheduleValue; }
 
 }
