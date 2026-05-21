@@ -1,8 +1,6 @@
 package com.barbershop.manager.controllers;
 
-import com.barbershop.manager.models.DTOs.Schedule.ScheduleDTO;
-import com.barbershop.manager.models.DTOs.Schedule.ScheduleInsertDTO;
-import com.barbershop.manager.models.DTOs.Schedule.ScheduleMinDTO;
+import com.barbershop.manager.models.DTOs.Schedule.*;
 import com.barbershop.manager.services.ScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,25 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleMinDTO>> findAllByClientId(@PathVariable("clientId") Long clientId) {
         List<ScheduleMinDTO> list = scheduleService.findAllByClientId(clientId);
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ScheduleDTO findById(@PathVariable("id") Long id) {
+        return scheduleService.findById(id);
+    }
+    @PatchMapping(value = "/{id}/status")
+    public ResponseEntity<Void> updateStatus(
+            @PathVariable Long id,
+            @RequestBody @Valid ScheduleStatusDTO dto) {
+
+        scheduleService.updateStatus(id, dto);
+        return ResponseEntity.noContent().build(); // Retorna 204
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ScheduleDTO> updateSchedule(@PathVariable Long id, @RequestBody @Valid ScheduleUpdateDTO dto) {
+        ScheduleDTO updatedDto = scheduleService.updateSchedule(id,dto);
+        return ResponseEntity.ok().body(updatedDto);
     }
 
 }
