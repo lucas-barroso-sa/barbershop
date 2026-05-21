@@ -2,6 +2,7 @@ package com.barbershop.manager.models.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Servicing {
     private long id;
     @Column(nullable = false)
     private String name;
-    private double price;
+    private BigDecimal price;
     @Column(nullable = false)
     private int durationInMinutes;
 
@@ -21,7 +22,7 @@ public class Servicing {
 
     }
 
-    public Servicing(Long id, String name, double price , int durationInMinutes) {
+    public Servicing(Long id, String name, BigDecimal price , int durationInMinutes) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -45,11 +46,11 @@ public class Servicing {
         this.name = name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

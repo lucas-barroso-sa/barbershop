@@ -2,11 +2,13 @@ package com.barbershop.manager.models.DTOs;
 
 import com.barbershop.manager.models.entities.Servicing;
 
+import java.math.BigDecimal;
+
 public class ServicingDTO {
 
     private Long id;
     private String name;
-    private double price;
+    private BigDecimal price;
     private int durationInMinutes;
 
     public ServicingDTO() {
@@ -35,11 +37,11 @@ public class ServicingDTO {
         this.name = name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
