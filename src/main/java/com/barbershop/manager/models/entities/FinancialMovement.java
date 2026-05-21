@@ -1,10 +1,13 @@
 package com.barbershop.manager.models.entities;
 
 import com.barbershop.manager.models.enums.EventType;
+import com.barbershop.manager.models.enums.MovementStatus;
 import com.barbershop.manager.models.enums.MovementType;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,15 +20,20 @@ public class FinancialMovement {
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
-
     @Enumerated(EnumType.STRING)
     private MovementType movementType;
+    @Enumerated(EnumType.STRING)
+    private MovementStatus movementStatus;
 
     private BigDecimal grossAmount;
     private BigDecimal netAmount;
     private BigDecimal discountAmount;
+    private LocalDate dueDate;
+    private LocalDate paymentDate;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime creationDate;
 
-    private LocalDateTime movementDate;
 
     private String description;
 
@@ -44,12 +52,12 @@ public class FinancialMovement {
 
     public FinancialMovement() {}
 
-    public FinancialMovement(EventType eventType, MovementType movementType, BigDecimal grossAmount, LocalDateTime movementDate, CostCenter costCenter, String description) {
+    public FinancialMovement(EventType eventType, MovementType movementType, BigDecimal grossAmount, CostCenter costCenter, String description) {
         this.eventType = eventType;
         this.movementType = movementType;
-        this.movementDate = movementDate;
         this.costCenter = costCenter;
         this.description = description;
+        this.movementStatus = MovementStatus.PENDING;
 
         // 1. Proteção contra nulos
         this.grossAmount = grossAmount != null ? grossAmount : BigDecimal.ZERO;
@@ -67,20 +75,41 @@ public class FinancialMovement {
     public BigDecimal getGrossAmount() { return grossAmount; }
     public BigDecimal getNetAmount() { return netAmount; }
     public BigDecimal getDiscountAmount() { return discountAmount; }
-    public LocalDateTime getMovementDate() { return movementDate; }
     public CostCenter getCostCenter() { return costCenter; }
     public String getDescription() { return description; }
     public Client getClient() { return client; }
     public Schedule getSchedule() { return schedule; }
+    public MovementStatus getMovementStatus() {
+        return movementStatus;
+    }
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+    public LocalDate getPaymentDate() {
+        return paymentDate;
+    }
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
 
+
+    public void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
+    }
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
+    }
     public void setId(Long id) { this.id = id; }
     public void setEventType(EventType eventType) { this.eventType = eventType; }
     public void setMovementType(MovementType movementType) { this.movementType = movementType; }
-    public void setMovementDate(LocalDateTime movementDate) { this.movementDate = movementDate; }
     public void setCostCenter(CostCenter costCenter) { this.costCenter = costCenter; }
     public void setDescription(String description) { this.description = description; }
     public void setClient(Client client) { this.client = client; }
     public void setSchedule(Schedule schedule) { this.schedule = schedule; }
+    public void setMovementStatus(MovementStatus movementStatus) { this.movementStatus = movementStatus; }
 
     // Ao mudar o valor bruto, o valor líquido se atualiza sozinho
     public void setGrossAmount(BigDecimal grossAmount) {
