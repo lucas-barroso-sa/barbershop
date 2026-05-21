@@ -32,6 +32,12 @@ public class ScheduleService {
                 .stream()
                 .map(obj -> new ScheduleDTO(obj)).toList();
     }
+    public List<ScheduleMinDTO> findAllByClientId(Long clientId) {
+        return scheduleRepository.findAllByClientIdOrderByAppointmentTimeAsc(clientId)
+                .stream()
+                .map(obj -> new ScheduleMinDTO(obj)).toList();
+    }
+
 
     @Transactional(readOnly = true)
     public List<ScheduleMinDTO> findByDate(LocalDate date) {

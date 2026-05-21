@@ -35,5 +35,10 @@ public class ScheduleController {
     public ScheduleDTO insertSchedule(@RequestBody @Valid ScheduleInsertDTO dto) {
         return scheduleService.insert(dto);
     }
+    @GetMapping(value = "/client/{clientId}") //endpoint para popular historico nos detalhes do cliente
+    public ResponseEntity<List<ScheduleMinDTO>> findAllByClientId(@PathVariable("clientId") Long clientId) {
+        List<ScheduleMinDTO> list = scheduleService.findAllByClientId(clientId);
+        return ResponseEntity.ok().body(list);
+    }
 
 }
