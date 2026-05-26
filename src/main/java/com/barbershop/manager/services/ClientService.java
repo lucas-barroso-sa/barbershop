@@ -1,7 +1,6 @@
 package com.barbershop.manager.services;
 
-import com.barbershop.manager.models.DTOs.ClientDTO;
-import com.barbershop.manager.models.DTOs.ClientMinDTO;
+import com.barbershop.manager.models.DTOs.client.ClientMinDTO;
 import com.barbershop.manager.models.entities.Client;
 import com.barbershop.manager.models.exceptions.CpfNullException;
 import com.barbershop.manager.models.exceptions.DataBaseException;

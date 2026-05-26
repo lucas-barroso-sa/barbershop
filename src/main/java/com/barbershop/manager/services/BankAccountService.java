@@ -1,8 +1,9 @@
 package com.barbershop.manager.services;
 
-import com.barbershop.manager.models.DTOs.BankAccountDTO;
-import com.barbershop.manager.models.DTOs.BankAccountInsertDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountInsertDTO;
 import com.barbershop.manager.models.entities.BankAccount;
+import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.repositories.BankAccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

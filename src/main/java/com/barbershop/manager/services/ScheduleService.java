@@ -54,12 +54,12 @@ public class ScheduleService {
         }
 
         schedule.setScheduleStatus(scheduleStatusDTO.getStatus());
-
-        if( schedule.getScheduleStatus() == ScheduleStatus.COMPLETED) {
-            financialMovementService.generateMovementFromSchedule(schedule);
-        }
+        //removido if com antíga lógica de completar agendamento -> gera financeiro
         scheduleRepository.save(schedule);
     }
+
+    public 
+
 
 
     @Transactional

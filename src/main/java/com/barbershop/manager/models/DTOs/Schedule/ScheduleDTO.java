@@ -1,6 +1,6 @@
 package com.barbershop.manager.models.DTOs.Schedule;
 
-import com.barbershop.manager.models.DTOs.ClientMinDTO;
+import com.barbershop.manager.models.DTOs.client.ClientMinDTO;
 import com.barbershop.manager.models.DTOs.ServicingDTO;
 import com.barbershop.manager.models.DTOs.user.UserDTO;
 import com.barbershop.manager.models.entities.Schedule;

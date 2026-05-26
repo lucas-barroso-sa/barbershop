@@ -1,7 +1,7 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.client;
 
 import com.barbershop.manager.models.entities.Client;
-import jakarta.validation.constraints.Pattern;
+
 public class ClientMinDTO {
 
     private Long  id;

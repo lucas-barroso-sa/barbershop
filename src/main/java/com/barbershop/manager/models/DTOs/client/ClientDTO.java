@@ -1,4 +1,4 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.client;
 
 import com.barbershop.manager.models.DTOs.Schedule.ScheduleMinDTO;
 
