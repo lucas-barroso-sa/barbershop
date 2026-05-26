@@ -2,7 +2,7 @@ package com.barbershop.manager.models.entities;
 
 import com.barbershop.manager.models.enums.PaymentCategory;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
+
 
 import java.math.BigDecimal;
 
