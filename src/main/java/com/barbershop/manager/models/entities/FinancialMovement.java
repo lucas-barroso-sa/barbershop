@@ -49,6 +49,13 @@ public class FinancialMovement {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_account_id")
+    private BankAccount bankAccount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_method_id")
+    private PaymentMethod paymentMethod;
 
     public FinancialMovement() {}
 
@@ -91,7 +98,13 @@ public class FinancialMovement {
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
 
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
 
     public void setNetAmount(BigDecimal netAmount) {
         this.netAmount = netAmount;
@@ -110,6 +123,12 @@ public class FinancialMovement {
     public void setClient(Client client) { this.client = client; }
     public void setSchedule(Schedule schedule) { this.schedule = schedule; }
     public void setMovementStatus(MovementStatus movementStatus) { this.movementStatus = movementStatus; }
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
     // Ao mudar o valor bruto, o valor líquido se atualiza sozinho
     public void setGrossAmount(BigDecimal grossAmount) {
