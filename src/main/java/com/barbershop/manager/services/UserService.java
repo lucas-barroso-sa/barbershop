@@ -3,6 +3,7 @@ package com.barbershop.manager.services;
 import com.barbershop.manager.models.DTOs.user.UserDTO;
 import com.barbershop.manager.models.DTOs.user.UserInsertDTO;
 import com.barbershop.manager.models.entities.User;
+import com.barbershop.manager.models.exceptions.EmailAlreadyExistsException;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.models.exceptions.RoleNullException;
 import com.barbershop.manager.repositories.UserRepository;
@@ -56,11 +57,15 @@ public class UserService {
         }
 
     }
-
+    @Transactional
     public UserDTO insert(UserInsertDTO dto) {
-        User user = convertDTOtoEntity(dto);
-        userRepository.save(user);
-        return new UserDTO(user);
+        if(userRepository.findByEmail(dto.getEmail()) == null){
+            User user = convertDTOtoEntity(dto);
+            userRepository.save(user);
+            return new UserDTO(user);
+        }
+        throw new EmailAlreadyExistsException("Email already exists");
+
 
     }
 
