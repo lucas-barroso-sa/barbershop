@@ -58,8 +58,6 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
 
-    public 
-
 
 
     @Transactional

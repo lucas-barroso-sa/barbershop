@@ -1,6 +1,6 @@
 package com.barbershop.manager.controllers;
 
-import com.barbershop.manager.models.DTOs.BankAccountDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountDTO;
 import com.barbershop.manager.models.DTOs.PaymentMethodDTO;
 import com.barbershop.manager.models.DTOs.PaymentMethodInsertDTO;
 import com.barbershop.manager.services.PaymentMethodService;
