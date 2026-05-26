@@ -1,4 +1,4 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.bankacc;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

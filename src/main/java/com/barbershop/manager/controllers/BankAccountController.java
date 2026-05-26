@@ -1,11 +1,8 @@
 package com.barbershop.manager.controllers;
 
-import com.barbershop.manager.models.DTOs.BankAccountDTO;
-import com.barbershop.manager.models.DTOs.BankAccountInsertDTO;
-import com.barbershop.manager.models.DTOs.FinancialMovementGetMinDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountInsertDTO;
 import com.barbershop.manager.services.BankAccountService;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
