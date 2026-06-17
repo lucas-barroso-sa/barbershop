@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -28,9 +29,16 @@ public class BankAccountService {
     }
 
     @Transactional(readOnly = true)
-    public BankAccount findEntityById(Long id) {
-        return bankAccountRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Bank Account doesn´t exist"));
+    public List<BankAccountDTO> findAll() {
+        return bankAccountRepository.findAll()
+                .stream()
+                .map(obj -> new BankAccountDTO(obj)).toList();
+    }
 
+    @Transactional(readOnly = true)
+    public BankAccount findEntityById(Long id) {
+        return bankAccountRepository.findById(id).orElseThrow(()
+                -> new ResourceNotFoundException("Bank Account not found with id " + id));
     }
 
 
