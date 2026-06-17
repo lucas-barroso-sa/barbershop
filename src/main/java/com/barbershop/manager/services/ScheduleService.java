@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ScheduleService {
@@ -26,12 +28,17 @@ public class ScheduleService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private FinancialMovementService financialMovementService;
+
 
     public ScheduleDTO findById(Long id) {
         return scheduleRepository.findById(id).map(obj -> new ScheduleDTO(obj))
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id "+id));
+    }
+
+    public Schedule findEntityById(Long id) {
+        return scheduleRepository.findById(id)
+                .orElseThrow(()
+                        -> new ResourceNotFoundException("Schedule not found with id "+id));
     }
 
     public List<ScheduleDTO> findAll() {
@@ -53,11 +60,27 @@ public class ScheduleService {
             return;
         }
 
-        schedule.setScheduleStatus(scheduleStatusDTO.getStatus());
-        //removido if com antíga lógica de completar agendamento -> gera financeiro
-        scheduleRepository.save(schedule);
+        if(scheduleStatusDTO.getStatus() != ScheduleStatus.COMPLETED) {
+            schedule.setScheduleStatus(scheduleStatusDTO.getStatus());
+            scheduleRepository.save(schedule);
+        }
+
     }
 
+    public void concludeSchedule(Long scheduleId, BigDecimal value) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(()
+                -> new ResourceNotFoundException("Schedule not found with id "+scheduleId));
+        schedule.setScheduleStatus(ScheduleStatus.COMPLETED);
+        if(Objects.equals(schedule.getScheduleValue(), value)) {
+            scheduleRepository.save(schedule);
+            return;
+        }
+        schedule.setScheduleValue(value);
+        scheduleRepository.save(schedule);
+
+
+    }
 
 
     @Transactional

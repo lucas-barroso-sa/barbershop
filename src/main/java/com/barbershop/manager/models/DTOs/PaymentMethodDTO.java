@@ -9,17 +9,18 @@ public class PaymentMethodDTO {
     private String name;
     private BigDecimal feePercentage;
     private Integer daysToReceive;
-    private Long defaultBankAccountId;
+    private String defaultBankAccountName;
 
     public PaymentMethodDTO() {}
+
     public PaymentMethodDTO(PaymentMethod entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.feePercentage = entity.getFeePercentage();
         this.daysToReceive = entity.getDaysToReceive();
-        this.defaultBankAccountId = entity
+        this.defaultBankAccountName = entity
                 .getDefaultBankAccount()
-                .getId();
+                .getName();
     }
 
     public Long getId() {
@@ -38,10 +39,9 @@ public class PaymentMethodDTO {
         return daysToReceive;
     }
 
-    public Long getDefaultBankAccountId() {
-        return defaultBankAccountId;
+    public String getDefaultBankAccountName() {
+        return defaultBankAccountName;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -59,7 +59,7 @@ public class PaymentMethodDTO {
         this.daysToReceive = daysToReceive;
     }
 
-    public void setDefaultBankAccountId(Long defaultBankAccountId) {
-        this.defaultBankAccountId = defaultBankAccountId;
+    public void setDefaultBankAccountName(String defaultBankAccountName) {
+        this.defaultBankAccountName = defaultBankAccountName;
     }
 }
