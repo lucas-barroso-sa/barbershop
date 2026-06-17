@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class FinancialMovement {
     private BigDecimal grossAmount;
     private BigDecimal netAmount;
     private BigDecimal discountAmount;
+    private BigDecimal feeAmount;
     private LocalDate dueDate;
     private LocalDate paymentDate;
     @CreationTimestamp
@@ -59,20 +61,33 @@ public class FinancialMovement {
 
     public FinancialMovement() {}
 
-    public FinancialMovement(EventType eventType, MovementType movementType, BigDecimal grossAmount, CostCenter costCenter, String description) {
-        this.eventType = eventType;
-        this.movementType = movementType;
-        this.costCenter = costCenter;
-        this.description = description;
-        this.movementStatus = MovementStatus.PENDING;
+    public FinancialMovement(Schedule schedule, PaymentMethod paymentMethod, BigDecimal grossAmount, BigDecimal amountPaid, LocalDate referenceDate) {
+        this.eventType = EventType.SERVICE_PAYMENT;
+        this.movementType = MovementType.INCOME;
+        this.schedule = schedule;
+        this.paymentMethod = paymentMethod;
+        this.bankAccount = paymentMethod.getDefaultBankAccount();
+        this.description = "Pagamento - Agendamento #" + schedule.getId();
 
-        // 1. Proteção contra nulos
+        //  Cálculos Financeiros
         this.grossAmount = grossAmount != null ? grossAmount : BigDecimal.ZERO;
+        BigDecimal safeAmountPaid = amountPaid != null ? amountPaid : this.grossAmount;
+        this.discountAmount = this.grossAmount.subtract(safeAmountPaid);
 
-        // Se não enviar o valor líquido, assumimos que pagou o valor cheio
-        this.netAmount = netAmount != null ? netAmount : this.grossAmount;
+        if (paymentMethod.getFeePercentage() != null && paymentMethod.getFeePercentage().compareTo(BigDecimal.ZERO) > 0) {
+            this.feeAmount = safeAmountPaid
+                    .multiply(paymentMethod.getFeePercentage())
+                    .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+        } else {
+            this.feeAmount = BigDecimal.ZERO;
+        }
 
-        this.discountAmount = this.grossAmount.subtract(this.netAmount);
+        this.netAmount = this.grossAmount.subtract(this.discountAmount).subtract(this.feeAmount);
+
+        // Regras de Prazos e Status
+        int daysToReceive = paymentMethod.getDaysToReceive() != null ? paymentMethod.getDaysToReceive() : 0;
+        this.dueDate = referenceDate.plusDays(daysToReceive);
+        this.movementStatus = MovementStatus.PENDING;
     }
 
     // --- GETTERS ---
@@ -101,14 +116,14 @@ public class FinancialMovement {
     public BankAccount getBankAccount() {
         return bankAccount;
     }
-
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
-
-    public void setNetAmount(BigDecimal netAmount) {
-        this.netAmount = netAmount;
+    public BigDecimal getFeeAmount() {
+        return feeAmount;
     }
+
+
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
@@ -129,23 +144,9 @@ public class FinancialMovement {
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
-
-    // Ao mudar o valor bruto, o valor líquido se atualiza sozinho
-    public void setGrossAmount(BigDecimal grossAmount) {
-        this.grossAmount = grossAmount != null ? grossAmount : BigDecimal.ZERO;
-        recalculateNetAmount();
+    public void setFeeAmount(BigDecimal feeAmount) {
+        this.feeAmount = feeAmount;
     }
 
-    // Ao mudar o desconto, o valor líquido se atualiza sozinho
-    public void setDiscountAmount(BigDecimal discountAmount) {
-        this.discountAmount = discountAmount != null ? discountAmount : BigDecimal.ZERO;
-        recalculateNetAmount();
-    }
 
-    // Méthodo interno privado para garantir mudança no valor liquido ao mudar valor bruto
-    private void recalculateNetAmount() {
-        if (this.grossAmount != null && this.discountAmount != null) {
-            this.netAmount = this.grossAmount.subtract(this.discountAmount);
-        }
-    }
 }
