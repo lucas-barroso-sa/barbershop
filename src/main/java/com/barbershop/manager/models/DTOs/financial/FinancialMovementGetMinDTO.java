@@ -1,4 +1,4 @@
-package com.barbershop.manager.models.DTOs;
+package com.barbershop.manager.models.DTOs.financial;
 
 import com.barbershop.manager.models.entities.FinancialMovement;
 import com.barbershop.manager.models.enums.MovementType;
