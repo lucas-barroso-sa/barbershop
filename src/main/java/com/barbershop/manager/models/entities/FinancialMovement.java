@@ -67,7 +67,8 @@ public class FinancialMovement {
         this.schedule = schedule;
         this.paymentMethod = paymentMethod;
         this.bankAccount = paymentMethod.getDefaultBankAccount();
-        this.description = "Pagamento - Agendamento #" + schedule.getId();
+        this.description = "Pagamento - Agendamento " + schedule.getClient().getName();
+        this.client = schedule.getClient();
 
         //  Cálculos Financeiros
         this.grossAmount = grossAmount != null ? grossAmount : BigDecimal.ZERO;

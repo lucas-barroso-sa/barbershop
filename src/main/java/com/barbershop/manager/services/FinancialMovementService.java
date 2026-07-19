@@ -1,15 +1,13 @@
 package com.barbershop.manager.services;
 
-import com.barbershop.manager.models.DTOs.CheckOutDTO;
-import com.barbershop.manager.models.DTOs.FinancialMovementGetMinDTO;
-import com.barbershop.manager.models.DTOs.FinancialMovementScheduleDTO;
-import com.barbershop.manager.models.DTOs.PaymentMethodDTO;
+import com.barbershop.manager.models.DTOs.financial.*;
+import com.barbershop.manager.models.entities.BankAccount;
 import com.barbershop.manager.models.entities.FinancialMovement;
 import com.barbershop.manager.models.entities.PaymentMethod;
 import com.barbershop.manager.models.entities.Schedule;
-import com.barbershop.manager.models.enums.EventType;
 import com.barbershop.manager.models.enums.MovementStatus;
 import com.barbershop.manager.models.enums.MovementType;
+import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.repositories.FinancialMovementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Service
@@ -29,6 +25,8 @@ public class FinancialMovementService {
     ScheduleService scheduleService;
     @Autowired
     PaymentMethodService paymentMethodService;
+    @Autowired
+    BankAccountService bankAccountService;
 
     @Transactional
     public FinancialMovementScheduleDTO scheduleCheckOut(CheckOutDTO dto) {
@@ -48,6 +46,50 @@ public class FinancialMovementService {
 
         return new FinancialMovementScheduleDTO(movement);
     }
+
+    @Transactional(readOnly = true)
+    public FinancialMovementDTO findById (Long id){
+        FinancialMovement entity = financialMovementRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Financial Movement not found with id "+id));
+        return new FinancialMovementDTO(entity);
+    }
+
+    @Transactional
+    public void settleMovement(Long id, SettleMovementDTO dto) {
+        FinancialMovement movement = financialMovementRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Financial Movement not found with id " + id));
+
+        if (movement.getMovementStatus() == MovementStatus.SETTLED) {
+            throw new IllegalStateException("Este movimento financeiro já foi efetivado anteriormente.");
+        }
+
+        BankAccount bankAccount = bankAccountService.findEntityById(dto.getBankAccountId());
+        if (bankAccount == null) {
+            throw new ResourceNotFoundException("Financial Movement returning bankAccount null id: " + id);
+        }
+
+        if (movement.getMovementType() == MovementType.INCOME) {
+            bankAccount.receive(movement.getNetAmount());
+        } else if (movement.getMovementType() == MovementType.EXPENSE) {
+            bankAccount.pay(movement.getNetAmount());
+        }
+
+        bankAccountService.updateFromMovement(bankAccount);
+
+        movement.setMovementStatus(MovementStatus.SETTLED);
+        movement.setPaymentDate(dto.getPaymentDate());
+
+        financialMovementRepository.save(movement);
+    }
+
+    public FinancialMovementDTO insert(FinancialMovementDTO dto) {}
+
+    //    public FinancialMovementDTO update(FinancialMovementUpdateDTO dto, Long id) {
+        //       FinancialMovement movement = financialMovementRepository.findById(id).orElseThrow(()
+                //               -> new ResourceNotFoundException("Financial Movement not found with id " + id));
+        //      movement.setDescription(dto.getDescription());
+        //      movement.set
+   // }
 
     public Page<FinancialMovementGetMinDTO> findReceivablesMin(LocalDate inicio, LocalDate fim, Pageable paginacao) {
         return financialMovementRepository.findByMovementTypeAndMovementStatusAndDueDateBetween(

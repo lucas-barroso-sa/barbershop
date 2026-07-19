@@ -1,11 +1,8 @@
 package com.barbershop.manager.controllers;
 
-import com.barbershop.manager.models.DTOs.CheckOutDTO;
-import com.barbershop.manager.models.DTOs.FinancialMovementGetMinDTO;
-import com.barbershop.manager.models.DTOs.FinancialMovementScheduleDTO;
+import com.barbershop.manager.models.DTOs.financial.*;
 import com.barbershop.manager.services.FinancialMovementService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +19,19 @@ public class FinancialMovementController {
 
     public FinancialMovementController(FinancialMovementService financialMovementService) {
         this.financialMovementService = financialMovementService;
+    }
+
+
+    @PatchMapping(value = "/{id}/settle")
+    public ResponseEntity<Void> settleMovement(@PathVariable Long id, @Valid @RequestBody SettleMovementDTO dto) {
+        financialMovementService.settleMovement(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<FinancialMovementDTO> findById(@PathVariable Long id){
+        FinancialMovementDTO dto = financialMovementService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping(value = "/checkout")
