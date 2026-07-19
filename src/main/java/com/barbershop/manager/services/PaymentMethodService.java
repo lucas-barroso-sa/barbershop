@@ -2,6 +2,7 @@ package com.barbershop.manager.services;
 
 import com.barbershop.manager.models.DTOs.PaymentMethodDTO;
 import com.barbershop.manager.models.DTOs.PaymentMethodInsertDTO;
+import com.barbershop.manager.models.DTOs.PaymentMethodUpdateDTO;
 import com.barbershop.manager.models.entities.BankAccount;
 import com.barbershop.manager.models.entities.PaymentMethod;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
@@ -51,5 +52,15 @@ public class PaymentMethodService {
                 -> new ResourceNotFoundException("PaymentMethod not found with id " + id));
     }
 
+    @Transactional
+    public PaymentMethodDTO updatePaymentMethod(Long id,PaymentMethodUpdateDTO paymentMethodUpdateDTO) {
+        PaymentMethod paymentMethod = findEntityById(id);
+        paymentMethod.setName(paymentMethodUpdateDTO.getName());
+        paymentMethod.setFeePercentage(paymentMethodUpdateDTO.getFeePercentage());
+        paymentMethod.setDaysToReceive(paymentMethodUpdateDTO.getDaysToReceive());
+        paymentMethod.setDefaultBankAccount(bankAccountService.findEntityById(paymentMethodUpdateDTO.getDefaultBankAccountId()));
+        paymentMethodRepository.save(paymentMethod);
+        return new PaymentMethodDTO(paymentMethod);
+    }
 
 }

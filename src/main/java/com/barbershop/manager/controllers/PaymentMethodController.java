@@ -2,7 +2,9 @@ package com.barbershop.manager.controllers;
 
 import com.barbershop.manager.models.DTOs.PaymentMethodDTO;
 import com.barbershop.manager.models.DTOs.PaymentMethodInsertDTO;
+import com.barbershop.manager.models.DTOs.PaymentMethodUpdateDTO;
 import com.barbershop.manager.services.PaymentMethodService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,13 @@ public class PaymentMethodController {
         List<PaymentMethodDTO> responseDto = paymentMethodService.findAllPaymentMethods();
         return ResponseEntity.ok(responseDto);
     }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<PaymentMethodDTO> updatePaymentMethod(@PathVariable Long id, @RequestBody @Valid PaymentMethodUpdateDTO updateDTO) {
+        PaymentMethodDTO responseDto = paymentMethodService.updatePaymentMethod(id, updateDTO);
+        return ResponseEntity.ok(responseDto);
+    }
+
 
 
 }
