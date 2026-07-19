@@ -2,7 +2,10 @@ package com.barbershop.manager.services;
 
 import com.barbershop.manager.models.DTOs.bankacc.BankAccountDTO;
 import com.barbershop.manager.models.DTOs.bankacc.BankAccountInsertDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountUpdateDTO;
 import com.barbershop.manager.models.entities.BankAccount;
+import com.barbershop.manager.models.enums.MovementType;
+import com.barbershop.manager.models.exceptions.DataBaseException;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.repositories.BankAccountRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +42,23 @@ public class BankAccountService {
     public BankAccount findEntityById(Long id) {
         return bankAccountRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Bank Account not found with id " + id));
+    }
+    @Transactional
+    public void updateFromMovement(BankAccount entity) {
+        try{
+            bankAccountRepository.save(entity);
+        }catch (DataBaseException e){
+            e.getStackTrace();
+        }
+
+    }
+    @Transactional
+    public BankAccountDTO updateBankAccount(Long id, BankAccountUpdateDTO dto) {
+        BankAccount bankAccount = findEntityById(id);
+        bankAccount.setName(dto.getBankAccountName());
+        bankAccountRepository.save(bankAccount);
+        return new BankAccountDTO(bankAccount);
+
     }
 
 

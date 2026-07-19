@@ -29,6 +29,36 @@
             this.balance = balance;
         }
 
+        public void receive(BigDecimal amount) {
+            // Blindagem contra valores nulos ou negativos
+            if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("O valor a ser recebido deve ser maior que zero.");
+            }
+
+            //  Prevenção de NullPointerException caso a conta tenha sido criada sem saldo inicial
+            if (this.balance == null) {
+                this.balance = BigDecimal.ZERO;
+            }
+
+
+            this.balance = this.balance.add(amount);
+        }
+
+
+        public void pay(BigDecimal amount) {
+            //Blindagem contra valores nulos ou negativos
+            if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("O valor a ser pago deve ser maior que zero.");
+            }
+
+            if (this.balance == null) {
+                this.balance = BigDecimal.ZERO;
+            }
+
+
+            this.balance = this.balance.subtract(amount);
+        }
+
         public Long getId() {
             return id;
         }
