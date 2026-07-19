@@ -2,7 +2,9 @@ package com.barbershop.manager.controllers;
 
 import com.barbershop.manager.models.DTOs.bankacc.BankAccountDTO;
 import com.barbershop.manager.models.DTOs.bankacc.BankAccountInsertDTO;
+import com.barbershop.manager.models.DTOs.bankacc.BankAccountUpdateDTO;
 import com.barbershop.manager.services.BankAccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,15 @@ public class BankAccountController {
     @GetMapping
     public List<BankAccountDTO> findAllBankAccount() {
         return bankAccountService.findAll();
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<BankAccountDTO> updateBankAccount(
+            @PathVariable Long id,
+            @RequestBody @Valid BankAccountUpdateDTO dto) {
+
+        BankAccountDTO responseDto = bankAccountService.updateBankAccount(id, dto);
+        return ResponseEntity.ok(responseDto);
     }
 
 }
