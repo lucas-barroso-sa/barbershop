@@ -1,5 +1,6 @@
 package com.barbershop.manager.models.entities;
 
+import com.barbershop.manager.models.DTOs.financial.FinancialMovementManualInsertDTO;
 import com.barbershop.manager.models.enums.EventType;
 import com.barbershop.manager.models.enums.MovementStatus;
 import com.barbershop.manager.models.enums.MovementType;
@@ -61,6 +62,7 @@ public class FinancialMovement {
 
     public FinancialMovement() {}
 
+    // Construtor para criar movimento financeiro a partir do agendamento
     public FinancialMovement(Schedule schedule, PaymentMethod paymentMethod, BigDecimal grossAmount, BigDecimal amountPaid, LocalDate referenceDate) {
         this.eventType = EventType.SERVICE_PAYMENT;
         this.movementType = MovementType.INCOME;
@@ -89,6 +91,58 @@ public class FinancialMovement {
         int daysToReceive = paymentMethod.getDaysToReceive() != null ? paymentMethod.getDaysToReceive() : 0;
         this.dueDate = referenceDate.plusDays(daysToReceive);
         this.movementStatus = MovementStatus.PENDING;
+    }
+
+
+    public FinancialMovement(FinancialMovementManualInsertDTO dto, PaymentMethod paymentMethod) {
+        this.movementType = dto.getMovementType();
+        this.paymentMethod = paymentMethod;
+        this.bankAccount = paymentMethod.getDefaultBankAccount();
+        this.description = dto.getDescription();
+        this.dueDate = dto.getDueDate();
+        this.movementStatus = MovementStatus.PENDING;
+        this.grossAmount = dto.getGrossAmount() != null ? dto.getGrossAmount() : BigDecimal.ZERO;
+        this.discountAmount = BigDecimal.ZERO; // Movimento manual não tem desconto de agendamento
+
+        // Recálculo automático da taxa
+        if (paymentMethod.getFeePercentage() != null && paymentMethod.getFeePercentage().compareTo(BigDecimal.ZERO) > 0) {
+            this.feeAmount = this.grossAmount
+                    .multiply(paymentMethod.getFeePercentage())
+                    .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+        } else {
+            this.feeAmount = BigDecimal.ZERO;
+        }
+
+        // Cálculo do líquido
+        this.netAmount = this.grossAmount.subtract(this.feeAmount);
+    }
+
+    // --- MÉTODOS DE NEGÓCIO ---
+
+    public void updateAmounts(BigDecimal newGrossAmount, BigDecimal amountPaid) {
+        // 1. Atualiza o valor bruto
+        this.grossAmount = newGrossAmount != null ? newGrossAmount : BigDecimal.ZERO;
+
+        // Se o valor pago não for informado, assume-se que pagou o valor cheio
+        BigDecimal safeAmountPaid = amountPaid != null ? amountPaid : this.grossAmount;
+
+        // 2. Recalcula o desconto
+        this.discountAmount = this.grossAmount.subtract(safeAmountPaid);
+
+        // 3. Recalcula as taxas (se houver métdo de pagamento vinculado)
+        if (this.paymentMethod != null &&
+                this.paymentMethod.getFeePercentage() != null &&
+                this.paymentMethod.getFeePercentage().compareTo(BigDecimal.ZERO) > 0) {
+
+            this.feeAmount = safeAmountPaid
+                    .multiply(this.paymentMethod.getFeePercentage())
+                    .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+        } else {
+            this.feeAmount = BigDecimal.ZERO;
+        }
+
+        // 4. Recalcula o valor líquido final
+        this.netAmount = this.grossAmount.subtract(this.discountAmount).subtract(this.feeAmount);
     }
 
     // --- GETTERS ---

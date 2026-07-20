@@ -69,6 +69,14 @@ public class FinancialMovementController {
         Page<FinancialMovementGetMinDTO> page = financialMovementService.findCashFLowMin(startDate, endDate, pageable);
         return ResponseEntity.ok(page);
     }
-
-
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<FinancialMovementDTO>updateMovement(@RequestBody @Valid FinancialMovementUpdateDTO dto,@PathVariable Long id){
+        FinancialMovementDTO result = financialMovementService.update(dto, id);
+        return ResponseEntity.ok(result);
+    }
+    @PostMapping
+    public ResponseEntity<FinancialMovementDTO> insertManualFinancialMovement(@RequestBody @Valid FinancialMovementManualInsertDTO dto){
+        FinancialMovementDTO result = financialMovementService.insert(dto);
+        return ResponseEntity.ok(result);
+    }
 }

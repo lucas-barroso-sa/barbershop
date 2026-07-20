@@ -88,7 +88,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + id));
 
-        // (Nenhum 'if null' é necessário graças ao @Valid no Controller)
+        // (Nenhum 'if null'  @Valid no Controller)
         schedule.setAppointmentTime(dto.getAppointmentTime());
         schedule.setClient(clientService.findEntityById(dto.getClientId()));
         schedule.setUser(userService.findEntityById(dto.getUserId()));

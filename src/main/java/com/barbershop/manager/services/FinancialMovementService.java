@@ -82,14 +82,35 @@ public class FinancialMovementService {
         financialMovementRepository.save(movement);
     }
 
-    public FinancialMovementDTO insert(FinancialMovementDTO dto) {}
+    @Transactional
+    public FinancialMovementDTO insert(FinancialMovementManualInsertDTO dto) {
+        PaymentMethod paymentMethod = paymentMethodService.findEntityById(dto.getPaymentMethodId());
+        FinancialMovement movement = new FinancialMovement(dto,paymentMethod);
+        financialMovementRepository.save(movement);
+        return new FinancialMovementDTO(movement);
+    }
 
-    //    public FinancialMovementDTO update(FinancialMovementUpdateDTO dto, Long id) {
-        //       FinancialMovement movement = financialMovementRepository.findById(id).orElseThrow(()
-                //               -> new ResourceNotFoundException("Financial Movement not found with id " + id));
-        //      movement.setDescription(dto.getDescription());
-        //      movement.set
-   // }
+    @Transactional
+    public FinancialMovementDTO update(FinancialMovementUpdateDTO dto, Long id) {
+        FinancialMovement movement = financialMovementRepository.findById(id).orElseThrow(()
+                              -> new ResourceNotFoundException("Financial Movement not found with id " + id));
+        movement.setDescription(dto.getDescription());
+        movement.setDueDate(dto.getDueDate());
+
+        if(dto.getPaymentDate() != null) {
+            movement.setPaymentDate(dto.getPaymentDate());
+        }
+        if(dto.getBankAccountId() != null) {
+            BankAccount bankAccount = bankAccountService.findEntityById(dto.getBankAccountId());
+            movement.setBankAccount(bankAccount);
+        }
+        if(dto.getAmount() != null) {
+            //passado duas vezes para verificação no metodo update amount
+            movement.updateAmounts(dto.getAmount(), dto.getAmount());
+        }
+        movement = financialMovementRepository.save(movement);
+        return new FinancialMovementDTO(movement);
+    }
 
     public Page<FinancialMovementGetMinDTO> findReceivablesMin(LocalDate inicio, LocalDate fim, Pageable paginacao) {
         return financialMovementRepository.findByMovementTypeAndMovementStatusAndDueDateBetween(

@@ -1,25 +1,30 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:16
     container_name: barber-postgres
     restart: always
     environment:
-      POSTGRES_USER: lucas_barroso
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: barbershop_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: barber-pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: lucas@unifor.br
-      PGADMIN_DEFAULT_PASSWORD: admin
+  api:
+    build: .
+    container_name: barber-api
+    restart: always
     ports:
-      - "8081:80"
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/barbershop_db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     depends_on:
       - db
 
