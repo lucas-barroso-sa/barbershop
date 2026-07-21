@@ -38,6 +38,14 @@ public class BankAccountService {
                 .map(obj -> new BankAccountDTO(obj)).toList();
     }
 
+    public List<BankAccount> findAllEntities(){
+        List<BankAccount> bankAccounts = bankAccountRepository.findAll();
+        if(bankAccounts.isEmpty()){
+            throw new ResourceNotFoundException("Bank Account not found");
+        }
+        return bankAccounts;
+    }
+
     @Transactional(readOnly = true)
     public BankAccount findEntityById(Long id) {
         return bankAccountRepository.findById(id).orElseThrow(()
