@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class FinancialMovementService {
@@ -88,6 +89,14 @@ public class FinancialMovementService {
         FinancialMovement movement = new FinancialMovement(dto,paymentMethod);
         financialMovementRepository.save(movement);
         return new FinancialMovementDTO(movement);
+    }
+
+    public List<FinancialMovement> findAllEntities() {
+        try{
+            return financialMovementRepository.findAll();
+        }catch(Exception e){
+            throw new ResourceNotFoundException("Financial Movement not found");
+        }
     }
 
     @Transactional

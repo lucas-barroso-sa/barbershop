@@ -29,4 +29,9 @@ public interface FinancialMovementRepository extends JpaRepository<FinancialMove
             LocalDate start,
             LocalDate end,
             Pageable pageable);
+
+    // Busca todas as movimentações pendentes para calcular atrasos, hoje e semana financia summary
+    List<FinancialMovement> findAllByMovementStatus(MovementStatus status);
+
+
 }
