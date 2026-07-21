@@ -2,12 +2,14 @@ package com.barbershop.manager.models.DTOs.user;
 
 import com.barbershop.manager.models.entities.User;
 import com.barbershop.manager.models.enums.UserRole;
+import com.barbershop.manager.models.enums.UserStatus;
 
 public class UserDTO {
     private Long id;
     private String name;
     private String email;
     private UserRole role;
+    private UserStatus status;
 
 
     public UserDTO() {
@@ -19,6 +21,7 @@ public class UserDTO {
         this.name = entity.getName();
         this.email = entity.getEmail();
         this.role = entity.getRole();
+        this.status = entity.getStatus();
     }
 
     public Long getId() {
@@ -45,8 +48,6 @@ public class UserDTO {
         this.email = email;
     }
 
-
-
     public UserRole getRole() {
         return role;
     }
@@ -56,4 +57,11 @@ public class UserDTO {
     }
 
 
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
 }

@@ -1,6 +1,7 @@
 package com.barbershop.manager.models.entities;
 
 import com.barbershop.manager.models.enums.UserRole;
+import com.barbershop.manager.models.enums.UserStatus;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,19 +21,24 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     @OneToMany
     private List<Schedule> schedules = new ArrayList<>();
 
     public User() {
     }
+    //TODO depois alterar construção do status inicial para pendente quando criar validação por e-mail
     public User(Long id, String name, String email, String password, UserRole role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.status = UserStatus.ACTIVE;
     }
 
     @Override
@@ -116,5 +122,13 @@ public class User implements UserDetails {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

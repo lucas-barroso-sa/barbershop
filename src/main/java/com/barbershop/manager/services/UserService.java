@@ -2,6 +2,7 @@ package com.barbershop.manager.services;
 
 import com.barbershop.manager.models.DTOs.user.UserDTO;
 import com.barbershop.manager.models.DTOs.user.UserInsertDTO;
+import com.barbershop.manager.models.DTOs.user.UserUpdateDTO;
 import com.barbershop.manager.models.entities.User;
 import com.barbershop.manager.models.exceptions.EmailAlreadyExistsException;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
@@ -47,8 +48,8 @@ public class UserService {
             User user = new User();
             user.setName(dto.getName());
             user.setEmail(dto.getEmail());
-            user.setId(dto.getId());
             user.setRole(dto.getRole());
+            user.setStatus(dto.getStatus());
             String encryptedPassword = passwordEncoder.encode(dto.getPassword());
             user.setPassword(encryptedPassword);
             return user;
@@ -68,6 +69,17 @@ public class UserService {
 
 
     }
+
+    @Transactional
+    public UserDTO update(UserUpdateDTO dto,Long id) {
+        User user = findEntityById(id);
+        user.setName(dto.getName());
+        user.setRole(dto.getRole());
+        user.setStatus(dto.getStatus());
+        userRepository.save(user);
+        return new UserDTO(user);
+    }
+
 
 }
 

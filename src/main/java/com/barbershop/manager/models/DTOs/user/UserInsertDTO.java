@@ -2,34 +2,17 @@ package com.barbershop.manager.models.DTOs.user;
 
 import com.barbershop.manager.models.entities.User;
 import com.barbershop.manager.models.enums.UserRole;
+import com.barbershop.manager.models.enums.UserStatus;
 
 public class UserInsertDTO {
-    private Long id;
     private String name;
     private String email;
     private UserRole role;
     private String password;
+    private UserStatus status;
 
     public UserInsertDTO() {
 
-    }
-
-
-
-    public UserInsertDTO(User entity) {
-        this.id = entity.getId();
-        this.name = entity.getName();
-        this.email = entity.getEmail();
-        this.role = entity.getRole();
-        this.password = entity.getPassword();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -64,5 +47,13 @@ public class UserInsertDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }
