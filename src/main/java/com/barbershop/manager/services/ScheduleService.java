@@ -8,6 +8,7 @@ import com.barbershop.manager.repositories.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -88,18 +89,19 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + id));
 
-        // (Nenhum 'if null'  @Valid no Controller)
         schedule.setAppointmentTime(dto.getAppointmentTime());
         schedule.setClient(clientService.findEntityById(dto.getClientId()));
         schedule.setUser(userService.findEntityById(dto.getUserId()));
         schedule.setScheduleValue(dto.getScheduleValue());
 
+        // 🟢 CORREÇÃO AQUI: Troque .toList() por .collect(Collectors.toList())
         schedule.setServicings(
                 dto.getServicingIds()
                         .stream()
                         .map(servicingId -> servicingService.findEntityById(servicingId))
-                        .toList()
+                        .collect(Collectors.toList()) // <<< LISTA MUTÁVEL PARA O HIBERNATE
         );
+
         schedule = scheduleRepository.save(schedule);
         return new ScheduleDTO(schedule);
     }
