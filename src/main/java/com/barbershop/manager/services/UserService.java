@@ -4,6 +4,7 @@ import com.barbershop.manager.models.DTOs.user.UserDTO;
 import com.barbershop.manager.models.DTOs.user.UserInsertDTO;
 import com.barbershop.manager.models.DTOs.user.UserUpdateDTO;
 import com.barbershop.manager.models.entities.User;
+import com.barbershop.manager.models.enums.UserStatus;
 import com.barbershop.manager.models.exceptions.EmailAlreadyExistsException;
 import com.barbershop.manager.models.exceptions.ResourceNotFoundException;
 import com.barbershop.manager.models.exceptions.RoleNullException;
@@ -62,6 +63,7 @@ public class UserService {
     public UserDTO insert(UserInsertDTO dto) {
         if(userRepository.findByEmail(dto.getEmail()) == null){
             User user = convertDTOtoEntity(dto);
+            user.setStatus(UserStatus.ACTIVE);
             userRepository.save(user);
             return new UserDTO(user);
         }

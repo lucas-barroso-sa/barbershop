@@ -1,4 +1,6 @@
 package com.barbershop.manager.models.DTOs.user;
 
-public record LoginResponseDTO(String token) {
+import com.barbershop.manager.models.enums.UserRole;
+
+public record LoginResponseDTO(String token, UserRole role, String name) {
 }

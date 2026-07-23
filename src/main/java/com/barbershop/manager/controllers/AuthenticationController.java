@@ -39,8 +39,20 @@ public class AuthenticationController {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
 
-            var token = tokenService.generateToken((User) auth.getPrincipal());
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            // 1. Pegamos o objeto User autenticado
+            User authenticatedUser = (User) auth.getPrincipal();
+
+            // Geramos o token
+            var token = tokenService.generateToken(authenticatedUser);
+
+            //  Montamos a resposta completa com o token, role e nome
+            var responseBody = new LoginResponseDTO(
+                    token,
+                    authenticatedUser.getRole(),
+                    authenticatedUser.getName()
+            );
+
+            return ResponseEntity.ok(responseBody);
 
         } catch (Exception e) {
             System.out.println(">>> ERRO NO LOGIN: " + e.getMessage());
