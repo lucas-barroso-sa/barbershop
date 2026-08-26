@@ -1,14 +1,21 @@
 package com.barbershop.manager.models.DTOs;
 
 import com.barbershop.manager.models.entities.Servicing;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
 public class ServicingDTO {
 
     private Long id;
+    @NotBlank
     private String name;
+    @NotNull
+    @Positive
     private BigDecimal price;
+    @NotNull
     private int durationInMinutes;
 
     public ServicingDTO() {
