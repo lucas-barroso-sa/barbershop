@@ -2,6 +2,7 @@ package com.barbershop.manager.services;
 
 import com.barbershop.manager.models.DTOs.ServicingDTO;
 import com.barbershop.manager.models.entities.Servicing;
+import com.barbershop.manager.models.exceptions.DataBaseException;
 import com.barbershop.manager.repositories.ServicingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,20 @@ public class ServicingService {
 
     }
 
+    @Transactional
+    public ServicingDTO update(ServicingDTO dto, Long id) {
+        try {
+            Servicing entity = findEntityById(id);
+            entity.setName(dto.getName());
+            entity.setPrice(dto.getPrice());
+            entity.setDurationInMinutes(dto.getDurationInMinutes());
+            entity = servicingRepository.save(entity);
+            return new ServicingDTO(entity);
+        }catch (Exception e){
+            throw new DataBaseException("Error while updating entity" + e.getMessage());
+        }
+
+    }
 
 
 }
