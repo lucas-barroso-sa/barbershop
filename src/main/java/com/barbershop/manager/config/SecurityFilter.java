@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             UserDetails user = userRepository.findByEmail(login);
 
             if (user != null) {
-                // 3. Cria o objeto de autenticação e avisa ao Spring: "Este cara está logado!"
+                // 3. Cria o objeto de autenticação e efetiva no spring
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

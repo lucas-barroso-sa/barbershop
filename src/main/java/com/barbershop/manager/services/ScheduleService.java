@@ -60,7 +60,6 @@ public class ScheduleService {
         if (schedule.getScheduleStatus() == scheduleStatusDTO.getStatus()) {
             return;
         }
-
         if(scheduleStatusDTO.getStatus() != ScheduleStatus.COMPLETED) {
             schedule.setScheduleStatus(scheduleStatusDTO.getStatus());
             scheduleRepository.save(schedule);

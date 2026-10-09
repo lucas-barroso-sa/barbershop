@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:16
@@ -27,6 +25,51 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     depends_on:
       - db
+      - otel-collector
+    volumes:
+      - ./docker-volume/otel:/otel
+    # Substituímos a diretiva command por entrypoint para garantir a ordem correta do Java
+    entrypoint:
+      - java
+      - -Xms256m
+      - -Xmx512m
+      - -javaagent:/otel/opentelemetry-javaagent.jar
+      - -Dotel.javaagent.configuration-file=/otel/opentelemetry-config.properties
+      - -Dotel.service.name=barber-api
+      - -jar
+      - /app/app.jar
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.158.0
+    container_name: otel-collector
+    # O ficheiro na sua pasta chama-se .yaml, por isso ajustamos o comando e o volume
+    command: ["--config=/etc/otel/collector-config.yaml"]
+    volumes:
+      - ./docker-volume/collector-config.yaml:/etc/otel/collector-config.yaml
+
+  tempo:
+    # Atualizado para usar a versão mais recente e estável (A tag 3.0.2 não é válida)
+    image: grafana/tempo:latest
+    container_name: tempo
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./docker-volume/tempo.yaml:/etc/tempo.yaml
+    depends_on:
+      - otel-collector
+
+  grafana:
+    # Atualizado para a versão mais recente (A tag 13.1.3 não existe, o Grafana vai na v11)
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ./docker-volume/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    ports:
+      - "3200:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - tempo
 
 volumes:
   pgdata:
